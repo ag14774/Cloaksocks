@@ -1,25 +1,18 @@
 version: "3.7"
 services:
-  # cloak-server:
-  #   image: freddykrum/cloaksocks:ck-server
-  #   ports:
-  #     - "$BINDPORT:$BINDPORT"
-  #   environment:
-  #     LOCAL_IP:     $LOCAL_IP
-  #     LOCAL_PORT:   $LOCAL_PORT
-  #     METHOD:       shadowsocks
-  #     BYPASSUID:    $BYPASSUID
-  #     REDIRADDR:    $REDIRADDR
-  #     PRIVATEKEY:   $PRIVATEKEY
-  #     ADMINUID:     $ADMINUID
-  #     PUBLICKEY:    $PUBLICKEY
-  #     ENCRYPTION:   $ENCRYPTION
-  #     PASSWORD:     $PASSWORD
-  #     BINDPORT:     $BINDPORT
-  #   deploy:
-  #     replicas: 1
-  #     restart_policy:
-  #       condition: always
+  cloak-server:
+    build:
+      context: .
+      dockerfile: Dockerfile-cloak-server
+    container_name: cloak-server
+    ports:
+      - "4433:4433"
+    environment:
+      CLOAK_BYPASS_UID: $CLOAK_BYPASS_UID
+      CLOAK_REDIR_ADDR: $CLOAK_REDIR_ADDR
+      CLOAK_PRIVATE_KEY: $CLOAK_PRIVATE_KEY
+      CLOAK_BIND_PORTS: $CLOAK_BIND_PORTS
+    restart: unless-stopped
 
   shadowsocks-server:
     build:

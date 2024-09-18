@@ -1,0 +1,14 @@
+{
+  "ProxyBook": {
+    "shadowsocks": [
+      "tcp",
+      "shadowsocks-server:8399"
+    ]
+  },
+  "BindAddr": [<CLOAK_BIND_PORTS>],
+  "BypassUID": [
+    "<CLOAK_BYPASS_UID>"
+  ],
+  "RedirAddr": "<CLOAK_REDIR_ADDR>",
+  "PrivateKey": "<CLOAK_PRIVATE_KEY>"
+}
