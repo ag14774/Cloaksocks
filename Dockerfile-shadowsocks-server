@@ -1,29 +1,18 @@
-FROM golang:alpine AS build
+FROM ghcr.io/shadowsocks/ssserver-rust:latest
 
-WORKDIR /opt
-RUN apk add git make
-RUN go install github.com/shadowsocks/go-shadowsocks2@latest
-
-
-# Final Docker image 
-FROM alpine:latest
-
-RUN apk upgrade \
-    && apk add tzdata \
-    && rm -rf /var/cache/apk/*
-
-ENV SERVER_IP     0.0.0.0
-ENV SERVER_PORT   8399
-ENV ENCRYPTION    AEAD_CHACHA20_POLY1305
-ENV PASSWORD      $PASSWORD
+ENV SS_SERVER_IP 0.0.0.0
+ENV SS_ENC_METHOD AEAD_CHACHA20_POLY1305
+ENV SS_SERVER_PASSWORD $PASSWORD
 
 EXPOSE 8399
 
+RUN mkdir -p /app
 WORKDIR /app
-COPY --from=build /go/bin/go-shadowsocks2 /app/shadowsocks-server
+
 COPY scripts/entrypoint-shadowsocks-server.sh /app/entrypoint.sh
 RUN chmod +x shadowsocks-server entrypoint.sh
 
-VOLUME /app
+COPY config/shadowsocks_config.json /app/config.json
 
 ENTRYPOINT [ "./entrypoint.sh" ]
+CMD [ "ssserver", "-a", "nobody", "-c", "/app/config.json" ]

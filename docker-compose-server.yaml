@@ -1,46 +1,35 @@
 version: "3.7"
 services:
-  cloak-server:
-    image: freddykrum/cloaksocks:ck-server
-    ports:
-      - "$BINDPORT:$BINDPORT"
-    environment:
-      LOCAL_IP:     $LOCAL_IP
-      LOCAL_PORT:   $LOCAL_PORT
-      METHOD:       shadowsocks
-      BYPASSUID:    $BYPASSUID
-      REDIRADDR:    $REDIRADDR
-      PRIVATEKEY:   $PRIVATEKEY
-      ADMINUID:     $ADMINUID
-      PUBLICKEY:    $PUBLICKEY
-      ENCRYPTION:   $ENCRYPTION
-      PASSWORD:     $PASSWORD
-      BINDPORT:     $BINDPORT
-      
-    networks:
-      - external
-      - internal
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: always
+  # cloak-server:
+  #   image: freddykrum/cloaksocks:ck-server
+  #   ports:
+  #     - "$BINDPORT:$BINDPORT"
+  #   environment:
+  #     LOCAL_IP:     $LOCAL_IP
+  #     LOCAL_PORT:   $LOCAL_PORT
+  #     METHOD:       shadowsocks
+  #     BYPASSUID:    $BYPASSUID
+  #     REDIRADDR:    $REDIRADDR
+  #     PRIVATEKEY:   $PRIVATEKEY
+  #     ADMINUID:     $ADMINUID
+  #     PUBLICKEY:    $PUBLICKEY
+  #     ENCRYPTION:   $ENCRYPTION
+  #     PASSWORD:     $PASSWORD
+  #     BINDPORT:     $BINDPORT
+  #   deploy:
+  #     replicas: 1
+  #     restart_policy:
+  #       condition: always
 
   shadowsocks-server:
-    image: freddykrum/cloaksocks:ss-server
+    build:
+      context: .
+      dockerfile: Dockerfile-shadowsocks-server
+    container_name: shadowsocks-server
     ports:
-      - "$LOCAL_PORT:$LOCAL_PORT"
+      - "8399:8399"
     environment:
-      SERVER_IP:     0.0.0.0
-      SERVER_PORT:   $LOCAL_PORT
-      ENCRYPTION:    $ENCRYPTION
-      PASSWORD:      $PASSWORD
-    networks:
-      - internal
-    deploy:
-      replicas: 1
-      restart_policy:
-        condition: always
-
-networks:
-  external:
-  internal:
+      SS_SERVER_IP: $SS_SERVER_IP
+      SS_SERVER_PASSWORD: $SS_SERVER_PASSWORD
+      SS_ENC_METHOD: $SS_ENC_METHOD
+    restart: unless-stopped

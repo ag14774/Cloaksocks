@@ -4,12 +4,8 @@ echo -e "=======================================================================
 echo -e "======================= SHADOWSOCKS(Golang)SERVER ============================"
 echo -e "=============================================================================="
 
-echo -e '[+] Show Container config'
-echo -e "[!] Server IP : \t${SERVER_IP}"
-echo -e "[!] Server Port : \t${SERVER_PORT}"
-echo -e "[!] Encryption Method:  ${ENCRYPTION}"
-echo -e "[!] Password : \t\t${PASSWORD}"
-
-exec /app/shadowsocks-server -s "ss://${ENCRYPTION}:${PASSWORD}@${SERVER_IP}:${SERVER_PORT}"
+sed -i "s|<SS_SERVER_IP>|${SS_SERVER_IP}|" /app/config.json
+sed -i "s|<SS_SERVER_PASSWORD>|${SS_SERVER_PASSWORD}|" /app/config.json
+sed -i "s|<SS_ENC_METHOD>|${SS_ENC_METHOD}|" /app/config.json
 
 exec "$@"

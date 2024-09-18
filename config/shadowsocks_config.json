@@ -1,0 +1,6 @@
+{
+    "server": "<SS_SERVER_IP>",
+    "server_port": 8399,
+    "password": "<SS_SERVER_PASSWORD>",
+    "method": "<SS_ENC_METHOD>"
+}
