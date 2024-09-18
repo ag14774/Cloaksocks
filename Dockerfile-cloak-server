@@ -16,7 +16,7 @@ RUN chmod +x /app/entrypoint.sh
 COPY ./bin/ck-server-linux-arm64-v2.9.0 /app/ck-server
 RUN chmod +x /app/ck-server
 
-COPY ./config/shadowsocks_config.json /app/config.json
+COPY ./config/cloak_server_config.json /app/config.json
 
 ENTRYPOINT [ "./entrypoint.sh" ]
 CMD [ "/app/ck-server" , "-c" , "/app/config.json" ]
