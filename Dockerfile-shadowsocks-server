@@ -10,7 +10,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY scripts/entrypoint-shadowsocks-server.sh /app/entrypoint.sh
-RUN chmod +x shadowsocks-server entrypoint.sh
+RUN chmod +x entrypoint.sh
 
 COPY config/shadowsocks_config.json /app/config.json
 
