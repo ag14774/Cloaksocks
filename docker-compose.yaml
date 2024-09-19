@@ -10,9 +10,6 @@ services:
       context: .
       dockerfile: Dockerfile-cloak-server
     container_name: cloak-server
-    ports:
-      - "443:443"
-      - "80:80"
     environment:
       CLOAK_BYPASS_UID: $CLOAK_BYPASS_UID
       CLOAK_REDIR_ADDR: $CLOAK_REDIR_ADDR
