@@ -1,4 +1,9 @@
 version: "3.7"
+
+networks:
+  rpi-docker_ipv4_net:
+    external: true
+
 services:
   cloak-server:
     build:
@@ -6,13 +11,23 @@ services:
       dockerfile: Dockerfile-cloak-server
     container_name: cloak-server
     ports:
-      - "433:443"
+      - "443:443"
       - "80:80"
     environment:
       CLOAK_BYPASS_UID: $CLOAK_BYPASS_UID
       CLOAK_REDIR_ADDR: $CLOAK_REDIR_ADDR
       CLOAK_PRIVATE_KEY: $CLOAK_PRIVATE_KEY
       CLOAK_BIND_PORTS: $CLOAK_BIND_PORTS
+    networks:
+      - rpi-docker_ipv4_net
+    labels:
+      - "traefik.http.routers.secureroute.rule=HostRegexp(`*`)"
+      - "traefik.http.routers.secureroute.entrypoints=websecure"
+      - "traefik.http.routers.secureroute.tls=true"
+      - "traefik.http.routers.secureroute.priority=1000"
+      # - "traefik.http.routers.secureroute.service=gitlab"
+      - "traefik.http.services.cloak-server.loadbalancer.server.port=443"
+      - "traefik.enable=true"
     restart: unless-stopped
 
   shadowsocks-server:
@@ -24,4 +39,6 @@ services:
       SS_SERVER_IP: $SS_SERVER_IP
       SS_SERVER_PASSWORD: $SS_SERVER_PASSWORD
       SS_ENC_METHOD: $SS_ENC_METHOD
+    networks:
+      - rpi-docker_ipv4_net
     restart: unless-stopped
