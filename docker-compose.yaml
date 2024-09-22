@@ -18,12 +18,12 @@ services:
     networks:
       - rpi-docker_ipv4_net
     labels:
-      - "traefik.http.routers.secureroute.rule=HostRegexp(`*`)"
-      - "traefik.http.routers.secureroute.entrypoints=websecure"
-      - "traefik.http.routers.secureroute.tls=true"
-      - "traefik.http.routers.secureroute.priority=1000"
-      # - "traefik.http.routers.secureroute.service=gitlab"
-      - "traefik.http.services.cloak-server.loadbalancer.server.port=443"
+      - "traefik.tcp.routers.secureroute.rule=HostSNI(`cn.bing.com`)"
+      - "traefik.tcp.routers.secureroute.entrypoints=websecure"
+      - "traefik.tcp.routers.secureroute.tls=true"
+      - "traefik.tcp.routers.secureroute.tls.passthrough=true"
+      - "traefik.tcp.routers.secureroute.service=securecloak@docker"
+      - "traefik.tcp.services.securecloak.loadbalancer.server.port=443"
       - "traefik.enable=true"
     restart: unless-stopped
 
